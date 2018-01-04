@@ -7,6 +7,10 @@ use App\Post;
 
 class PostsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     public function index()
     {
         $posts = Post::latest()->get();
@@ -30,7 +34,43 @@ class PostsController extends Controller
             'body' => 'required'
         ]);
 
-        Post::create(request(['title','body']));
+        auth()->user()->publish(
+            new Post(request(['title', 'body']))
+        );
+
         return redirect('/');
+    }
+
+
+
+
+
+
+
+
+
+
+    public function fileUpload(Request $request)
+    {
+        $this->validate($request, [
+
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
+        ]);
+
+
+        $image = $request->file('image');
+
+        $input['imagename'] = time().'.'.$image->getClientOriginalExtension();
+
+        $destinationPath = public_path('/images');
+
+        $image->move($destinationPath, $input['imagename']);
+
+
+        $this->postImage->add($input);
+
+
+        return back()->with('success','Image Upload successful');
     }
 }
