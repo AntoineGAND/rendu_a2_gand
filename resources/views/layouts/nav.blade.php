@@ -6,6 +6,7 @@
 
                 @if(Auth::check())
                     <li class="nav-item"><a class="nav-link" href="{{route('publish')}}">Publish</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('chat')}}">Chat</a></li>
                     <li class="nav-item ml-auto"><a class="nav-link  ml-auto" href="#">{{Auth::user()->name}}</a></li>
                     <li class="nav-item"><a class="nav-link  ml-auto" href="{{route('logout')}}">Logout</a></li>
                 @else
